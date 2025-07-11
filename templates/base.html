@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Crypto Sentiment Dashboard{% endblock %}</title>
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <!-- React and Babel -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Axios -->
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <!-- Lucide Icons -->
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+  <style>
+    body {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+    }
+
+    canvas {
+      max-height: 400px !important;
+      height: 400px !important;
+    }
+
+    .gradient-bg {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      min-height: 100vh;
+    }
+
+    .card {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.2);
+      color: #e2e8f0;
+    }
+
+    .card:hover {
+      box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.1),
+        0 4px 6px -2px rgba(59, 130, 246, 0.05);
+      border-color: #3b82f6;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      border: 1px solid #2563eb;
+      color: white;
+      font-weight: 600;
+      padding: 12px 24px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #2563eb 0%, #1e40af 100%);
+      box-shadow: 0 6px 12px -2px rgba(59, 130, 246, 0.4);
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #374151 0%, #4b5563 100%);
+      border: 1px solid #6b7280;
+      color: #e5e7eb;
+      font-weight: 500;
+      padding: 12px 24px;
+      border-radius: 8px;
+      transition: all 0.3s ease;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, #4b5563 0%, #6b7280 100%);
+      border-color: #3b82f6;
+    }
+
+    input,
+    select,
+    textarea {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      color: #e2e8f0;
+      border-radius: 8px;
+      padding: 10px 12px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      outline: none;
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    }
+
+    .time-range-selector {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 4px;
+    }
+
+    .time-range-btn {
+      padding: 8px 16px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+    }
+
+    .time-range-btn.active {
+      background: linear-gradient(135deg, #3b82f6 0%, #1d4ed8 100%);
+      color: white;
+      box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
+    }
+
+    .time-range-btn:not(.active) {
+      background: transparent;
+      color: #94a3b8;
+    }
+
+    .time-range-btn:not(.active):hover {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .sentiment-card-positive {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border-left: 4px solid #10b981;
+    }
+
+    .sentiment-card-negative {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border-left: 4px solid #ef4444;
+    }
+
+    .sentiment-card-neutral {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border-left: 4px solid #3b82f6;
+    }
+
+    .sentiment-card-overall {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border-left: 4px solid #8b5cf6;
+    }
+
+    .chart-container {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      border-radius: 12px;
+      padding: 24px;
+    }
+
+    .export-section {
+      background: linear-gradient(145deg, #1e293b 0%, #334155 100%);
+      border: 1px solid #475569;
+      border-radius: 12px;
+    }
+
+    .ml-ready-badge {
+      background: linear-gradient(135deg, #1e40af 0%, #3730a3 100%);
+      border: 1px solid #3b82f6;
+      color: #dbeafe;
+      padding: 16px;
+      border-radius: 8px;
+    }
+
+    .price-positive {
+      color: #10b981;
+    }
+
+    .price-negative {
+      color: #ef4444;
+    }
+
+    .loading-spinner {
+      border-color: #374151;
+      border-top-color: #3b82f6;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1e293b;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #475569;
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #3b82f6;
+    }
+
+    .text-primary {
+      color: #e2e8f0;
+    }
+
+    .text-secondary {
+      color: #94a3b8;
+    }
+
+    .text-muted {
+      color: #64748b;
+    }
+
+    h1,
+    h2,
+    h3,
+    h4,
+    h5,
+    h6 {
+      color: #f1f5f9;
+    }
+
+    .accent-blue {
+      color: #3b82f6;
+    }
+
+    .bg-accent-blue {
+      background-color: #3b82f6;
+    }
+
+    .border-accent-blue {
+      border-color: #3b82f6;
+    }
+  </style>
+</head>
+<body class="gradient-bg min-h-screen">
+  <div id="app">
+    {% block content %}{% endblock %}
+  </div>
+
+  {% block scripts %}{% endblock %}
+</body>
+</html>

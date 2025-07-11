@@ -1,0 +1,16 @@
+{
+  "name": "crypto-sentiment-panel-flask",
+  "version": "1.0.0",
+  "description": "Dashboard de sentimento de criptomoedas em Flask e React",
+  "main": "app.py",
+  "scripts": {
+    "start": "python run.py",
+    "dev": "python run.py"
+  },
+  "dependencies": {
+    "flask": "^2.3.3"
+  },
+  "keywords": ["flask", "react", "crypto", "sentiment", "dashboard"],
+  "author": "Your Name",
+  "license": "MIT"
+}
