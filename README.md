@@ -1,4 +1,3 @@
-# Painel de sentimento de mercado cripto em tempo real com Flask e CoinGecko.
 
 # Painel de Sentimento Cripto
 
