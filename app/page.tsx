@@ -39,7 +39,7 @@ const POPULAR_COINS = [
   { id: "cardano", name: "Cardano", symbol: "ADA" },
 ]
 
-// Generate mock sentiment data
+// gerar dados mock (alterar depois)
 const generateSentimentData = (coinId: string): SentimentData[] => {
   const data: SentimentData[] = []
   const now = new Date()
@@ -47,7 +47,7 @@ const generateSentimentData = (coinId: string): SentimentData[] => {
   for (let i = 23; i >= 0; i--) {
     const timestamp = new Date(now.getTime() - i * 60 * 60 * 1000)
 
-    // Create realistic sentiment patterns based on coin
+    // padroes de sentimento
     let basePositive = 45
     let baseNegative = 35
 
@@ -59,7 +59,7 @@ const generateSentimentData = (coinId: string): SentimentData[] => {
       baseNegative = 30
     }
 
-    // Add some randomness and trends
+    // adicionar aleatoriedade e trend
     const variation = Math.sin(i * 0.3) * 10 + Math.random() * 10 - 5
     const positive = Math.max(20, Math.min(70, basePositive + variation))
     const negative = Math.max(15, Math.min(50, baseNegative - variation * 0.5))
