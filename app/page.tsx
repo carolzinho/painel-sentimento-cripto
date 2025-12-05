@@ -87,7 +87,7 @@ export default function CryptoSentimentDashboard() {
   const [timeRange, setTimeRange] = useState<TimeRange>("1d")
   const [sentimentData, setSentimentData] = useState<EnhancedSentimentData[]>([])
 
-  // Fetch coin data from CoinGecko
+  // fetch coin da coingecko 
   useEffect(() => {
     const fetchCoinData = async () => {
       try {
@@ -119,7 +119,7 @@ export default function CryptoSentimentDashboard() {
     fetchCoinData()
   }, [selectedCoin, timeRange])
 
-  // Load alerts from localStorage
+  // alertas localstorage
   useEffect(() => {
     const savedAlerts = localStorage.getItem("crypto-sentiment-alerts")
     if (savedAlerts) {
@@ -131,12 +131,12 @@ export default function CryptoSentimentDashboard() {
     }
   }, [])
 
-  // Save alerts to localStorage
+  // salvar alertas 
   useEffect(() => {
     localStorage.setItem("crypto-sentiment-alerts", JSON.stringify(alerts))
   }, [alerts])
 
-  // Track previous sentiment for alert checking
+  // track sentimentos previos para alerta de mudança
   useEffect(() => {
     if (sentimentData.length > 1) {
       setPreviousSentiment(sentimentData[sentimentData.length - 2])
@@ -191,10 +191,10 @@ export default function CryptoSentimentDashboard() {
           </div>
         </div>
 
-        {/* Notification Permission Prompt */}
+        {/* prompt notificaçao */}
         <NotificationPermission />
 
-        {/* Price Info */}
+        {/* preço */}
         {coinData && (
           <Card>
             <CardContent className="p-6">
@@ -227,7 +227,7 @@ export default function CryptoSentimentDashboard() {
           </Card>
         )}
 
-        {/* Sentiment Cards */}
+        {/* cards sentimento */}
         {currentSentiment && (
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
             <Card>
@@ -283,7 +283,7 @@ export default function CryptoSentimentDashboard() {
           </div>
         )}
 
-        {/* Sentiment Chart */}
+        {/* chart sentimento */}
         <Card>
           <CardHeader>
             <CardTitle>Sentiment Over Time (24h)</CardTitle>
@@ -353,7 +353,7 @@ export default function CryptoSentimentDashboard() {
           </CardContent>
         </Card>
 
-        {/* Additional Info */}
+        {/* info */}
         <Card>
           <CardHeader>
             <CardTitle>About Sentiment Analysis</CardTitle>
@@ -384,7 +384,7 @@ export default function CryptoSentimentDashboard() {
           </CardContent>
         </Card>
 
-        {/* Alert Manager */}
+        {/* gerenciador de alertas */}
         <Card>
           <CardContent className="p-6">
             <AlertManager
@@ -396,7 +396,7 @@ export default function CryptoSentimentDashboard() {
           </CardContent>
         </Card>
 
-        {/* Notification System */}
+        {/* sistema de notificação */}
         <NotificationSystem
           alerts={alerts}
           currentSentiment={currentSentiment}
@@ -404,10 +404,10 @@ export default function CryptoSentimentDashboard() {
           coinName={selectedCoinInfo?.name || ""}
         />
 
-        {/* Toast Notifications */}
+        {/* notificações toast */}
         <Toaster />
 
-        {/* Export Manager */}
+        {/* gerenciador de export */}
         <ExportManager
           sentimentData={sentimentData}
           coinId={selectedCoin}
